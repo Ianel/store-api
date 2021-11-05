@@ -1,11 +1,27 @@
+// NODE MODULES
 const express = require('express');
+const morgan = require('morgan');
 
+// CUSTOM MODULES
+const movieRouter = require('./routes/movieRoutes');
+
+// VARIABLES
 const app = express();
 
-const port = 3000;
+// MIDDLEWARE
+app.use(morgan('dev'));
+app.use(express.json());
+app.use((req, res, next) => {
+    console.log("Hello from the middleware");
+    next();
+});
+app.use((req, res, next) => {
+    req.requestTime = new Date().toISOString();
+    next();
+})
 
+// ROUTE HANDLERS
 app.get('/', (req, res) => {
-    res.status(500).send('Internal error from the server side')
     res.status(200).json({
         "status": "success",
         "data": { 
@@ -15,10 +31,7 @@ app.get('/', (req, res) => {
     });
 });
 
-app.post('/', (req, res) => {
-    res.send('Post method');
-});
+// ROUTES
+app.use('/artflix/v1/movies', movieRouter);
 
-app.listen(port, () => {
-    console.log(`App running on port ${port}`);
-});
+module.exports = app;
