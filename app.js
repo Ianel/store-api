@@ -3,7 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 
 // CUSTOM MODULES
-const movieRouter = require('./routes/movieRoutes');
+const productRouter = require('./routes/productRoutes');
 
 // VARIABLES
 const app = express();
@@ -20,18 +20,7 @@ app.use((req, res, next) => {
     next();
 })
 
-// ROUTE HANDLERS
-app.get('/', (req, res) => {
-    res.status(200).json({
-        "status": "success",
-        "data": { 
-            message: 'Hello World from artflix', 
-            app: "artflix" 
-        }
-    });
-});
-
 // ROUTES
-app.use('/artflix/v1/movies', movieRouter);
+app.use('/api/v1/products', productRouter);
 
 module.exports = app;
