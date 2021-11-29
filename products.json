@@ -1,0 +1,32 @@
+[
+    {
+        "name": "accent chair",
+        "price": 25,
+        "company": "marcos",
+        "rating": 4
+    },
+    {
+        "name": "alabany sectional",
+        "price": 109,
+        "company": "liddy",
+        "rating": 5
+    },
+    {
+        "name": "albany table",
+        "price": 309,
+        "company": "liddy",
+        "rating": 4.9
+    },
+    {
+        "name": "armchair",
+        "price": 125,
+        "company": "marcos",
+        "rating": 4.8
+    },
+    {
+        "name": "sitting chair",
+        "price": 58,
+        "company": "ikea",
+        "rating": 4.6
+    }
+]
