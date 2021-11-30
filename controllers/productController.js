@@ -1,10 +1,8 @@
 const Products = require('../models/Products');
-const asyncWrapper = require('../middleware/async');
 const { StatusCodes } = require('http-status-codes');
-const { createCustomError } = require('../errors/custom-error');
-const { BadRequestError, NotFoundError } = require('../errors');
+const { CustomAPIError } = require('../errors');
 
-exports.getAllProducts = asyncWrapper(async (req, res) => {
+exports.getAllProducts = async (req, res) => {
     const { featured, company, name, sort, fields, numericFilters } = req.query;
     const queryObject = {};
 
@@ -70,45 +68,45 @@ exports.getAllProducts = asyncWrapper(async (req, res) => {
 
     const products = await result;
 
-    res.status(StatusCodes.OK).json({ status: "success", nbOfItems: products.length, products }); 
-});
+    res.status(StatusCodes.OK).json({ status: "success", nbOfItems: products.length, data: products }); 
+};
 
-exports.getAllProductsStatic = asyncWrapper(async (req, res) => {
+exports.getAllProductsStatic = async (req, res) => {
     const products = await Products
                             .find({ price: { $gt: 30 } })
                             .sort('price')
-    res.status(StatusCodes.OK).json({ status: "success", nbOfItems: products.length, products }); 
-});
+    res.status(StatusCodes.OK).json({ status: "success", nbOfItems: products.length, data: products }); 
+};
 
-exports.getProduct = asyncWrapper(async (req, res, next) => {
+exports.getProduct = async (req, res) => {
     const product = await Products.findOne({ _id: req.params.id });
     if (!product) {
-        return next(createCustomError(`No product find with id: ${req.params.id}`, 404));
+        throw new CustomAPIError(`No product find with id: ${req.params.id}`, 404);
     }
-    res.status(StatusCodes.OK).json({ product });
-});
+    res.status(StatusCodes.OK).json({ status: "success", data: product });
+};
 
-exports.addProduct = asyncWrapper(async (req, res) => {
+exports.addProduct = async (req, res) => {
     req.body.createdBy = req.user.userId;
     const product = await Products.create(req.body);
-    res.status(StatusCodes.CREATED).json({ product });
-});
+    res.status(StatusCodes.CREATED).json({ status:"success", data: product });
+};
 
-exports.updateProduct = asyncWrapper(async (req, res) => {
+exports.updateProduct = async (req, res) => {
     const product = await Products.findOneAndUpdate({ _id: req.params.id }, req.body, {
         new: true,
         runValidators: true,
     } );
     if (!product) {
-        return next(createCustomError(`No product find with id: ${req.params.id}`, 404));
+        throw new CustomAPIError(`No product find with id: ${req.params.id}`, 404);
     }
-    res.status(StatusCodes.OK).json({ product }); 
-});
+    res.status(StatusCodes.OK).json({ status: "success", data: product }); 
+};
 
-exports.deleteProduct = asyncWrapper(async (req, res) => {
+exports.deleteProduct = async (req, res) => {
     const product = await Products.findOneAndDelete({ _id: req.params.id });
     if (!product) {
-        return next(createCustomError(`No product find with id: ${req.params.id}`, 404));
+        throw new CustomAPIError(`No product find with id: ${req.params.id}`, 404);
     }
-    res.status(StatusCodes.OK).json({ product: null, status: "success" });
-});
+    res.status(StatusCodes.OK).json({ status: "success", data: product });
+};
