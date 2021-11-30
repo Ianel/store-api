@@ -1,6 +1,6 @@
 # Store API
 
-An API that can be used for a store website including products, users and authentication.
+An API that can be used for a store website including products, users, orders and authentication.
 
 ## Installation
 
@@ -27,3 +27,10 @@ For the users:
 For authentication:
 - `POST /api/v1/auth/register` : register a user
 - `POST /api/v1/auth/login` : login as a user
+
+For the orders:
+- `GET /api/v1/orders` : get the list of orders created by a specific user
+- `GET /api/v1/orders/:orderId` : get a specific order created by a specific user
+- `POST /api/v1/orders` : create an order as a specific user
+- `PATCH /api/v1/orders/:orderId` : update the order with the given id created by a specific user
+- `DELETE /api/v1/orders/:orderId` : delete the order with the given id created by a specific user
