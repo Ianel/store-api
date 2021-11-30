@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Order = new mongoose.Schema({
     orderedBy: {
         type: mongoose.Types.ObjectId,
-        ref: 'User',
+        ref: 'Order',
         required: [true, 'Must be ordered by someone'],
     },
     createdAt: {
