@@ -1,10 +1,10 @@
-const User = require('../models/Users');
 const jwt = require('jsonwebtoken');
 const { UnauthenticatedError } = require('../errors');
 
 const authenticationMiddleware = async (req, res, next) => {
     
     const authHeader = req.headers.authorization;
+    console.log(authHeader);
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         throw new UnauthenticatedError('No token provided');
@@ -16,13 +16,13 @@ const authenticationMiddleware = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         req.user = { userId: decoded.userId, name: decoded.name };
+        console.log("Token", decoded);
         next();
 
     } catch (error) {
         throw new UnauthenticatedError('Not authorized to access this route');
-    }
+    } 
 
-    next();
 };
 
 module.exports = authenticationMiddleware;
